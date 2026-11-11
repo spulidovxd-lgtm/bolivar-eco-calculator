@@ -11,9 +11,87 @@
   </header>
 
   <main>
+    <section id="calculadora">
+      <h2>Calcula tu impacto semanal</h2>
+
+      <p>
+        <label for="transporte">Medio de transporte al colegio:</label>
+        <select id="transporte">
+          <option value="bus">Bus</option>
+          <option value="carro-privado">Carro privado</option>
+          <option value="carro-compartido">Carro compartido</option>
+          <option value="bici-caminando">Bicicleta / Caminando</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="papel">Hojas de papel usadas al día:</label>
+        <input type="number" id="papel" min="0" step="1" value="0">
+      </p>
+
+      <p>
+        <label for="reciclaje">Nivel de reciclaje:</label>
+        <select id="reciclaje">
+          <option value="ninguno">Ninguno</option>
+          <option value="bajo">Bajo</option>
+          <option value="medio">Medio</option>
+          <option value="alto">Alto</option>
+        </select>
+      </p>
+
+      <button type="button" id="btn-calcular">Calcular</button>
+    </section>
+
+    <section id="resultado" hidden>
+      <h2>Resultado</h2>
+      <p>CO₂ estimado por semana: <strong id="res-co2">0</strong> kg</p>
+      <p>Eco-Points: <strong id="res-puntos">0</strong></p>
+    </section>
   </main>
 
   <footer>
+    <small>Supuestos: 20 km de viaje al día (ida y vuelta), 5 días a la semana.</small>
   </footer>
+
+  <script>
+    // Supuestos
+    const KM_POR_DIA = 20;
+    const DIAS_SEMANA = 5;
+    const CO2_POR_HOJA = 0.005; // kg CO2 por hoja
+
+    // Factores de emisión (kg CO2 por km por persona)
+    const FACTOR_TRANSPORTE = {
+      "bus": 0.089,
+      "carro-privado": 0.192,
+      "carro-compartido": 0.064, // ~3 ocupantes
+      "bici-caminando": 0
+    };
+
+    // Reciclaje: reducción de emisiones del papel y bono de puntos
+    const RECICLAJE = {
+      "ninguno": { reduccion: 0,   bono: 0 },
+      "bajo":    { reduccion: 0.2, bono: 5 },
+      "medio":   { reduccion: 0.5, bono: 10 },
+      "alto":    { reduccion: 0.8, bono: 20 }
+    };
+
+    function calcular() {
+      const transporte = document.getElementById("transporte").value;
+      const hojasDia = Math.max(0, parseFloat(document.getElementById("papel").value) || 0);
+      const reciclaje = document.getElementById("reciclaje").value;
+
+      const co2Transporte = FACTOR_TRANSPORTE[transporte] * KM_POR_DIA * DIAS_SEMANA;
+      const co2Papel = hojasDia * DIAS_SEMANA * CO2_POR_HOJA * (1 - RECICLAJE[reciclaje].reduccion);
+      const total = co2Transporte + co2Papel;
+
+      const puntos = Math.max(0, Math.round(100 - total * 3)) + RECICLAJE[reciclaje].bono;
+
+      document.getElementById("res-co2").textContent = total.toFixed(2);
+      document.getElementById("res-puntos").textContent = puntos;
+      document.getElementById("resultado").hidden = false;
+    }
+
+    document.getElementById("btn-calcular").addEventListener("click", calcular);
+  </script>
 </body>
 </html>
