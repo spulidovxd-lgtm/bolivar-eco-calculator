@@ -1,0 +1,267 @@
+/* ===== Color and style variables (Eco Mode) ===== */
+:root {
+  --verde-oscuro: #064e3b;
+  --esmeralda: #059669;
+  --esmeralda-claro: #10b981;
+  --verde-suave: #d1fae5;
+  --fondo: #ecfdf5;
+  --blanco: #ffffff;
+  --texto: #1f2937;
+  --borde: #a7f3d0;
+  --radio: 16px;
+  --sombra: 0 8px 24px rgba(6, 78, 59, 0.12);
+}
+
+/* ===== Base ===== */
+* { box-sizing: border-box; }
+
+/* Keeps the hidden attribute working */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  padding: 24px 16px;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  color: var(--texto);
+  background: linear-gradient(160deg, var(--fondo), var(--verde-suave));
+  min-height: 100vh;
+}
+
+/* ===== Header ===== */
+header {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  color: var(--verde-oscuro);
+  letter-spacing: -0.5px;
+}
+
+h1::before { content: "🌿 "; }
+
+/* Language selector (top right of the header) */
+.selector-idioma {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.selector-idioma select {
+  width: auto;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ===== Main container ===== */
+main {
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+/* ===== Cards ===== */
+.tarjeta {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 24px;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: var(--esmeralda);
+}
+
+/* ===== Form ===== */
+.campo { margin-bottom: 18px; }
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--verde-oscuro);
+}
+
+select, input[type="number"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--texto);
+  background: var(--fondo);
+  border: 2px solid var(--borde);
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select:focus, input[type="number"]:focus {
+  outline: none;
+  border-color: var(--esmeralda-claro);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+}
+
+/* ===== Button ===== */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--blanco);
+  background: linear-gradient(135deg, var(--esmeralda), var(--esmeralda-claro));
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(5, 150, 105, 0.45);
+  filter: brightness(1.05);
+}
+
+button:active { transform: translateY(0); }
+
+button:focus-visible {
+  outline: 3px solid var(--verde-oscuro);
+  outline-offset: 3px;
+}
+
+/* Secondary (outlined) button used for printing */
+button.secundario {
+  margin-top: 16px;
+  color: var(--esmeralda);
+  background: var(--blanco);
+  border: 2px solid var(--esmeralda);
+  box-shadow: none;
+}
+
+button.secundario:hover {
+  background: var(--fondo);
+  box-shadow: 0 6px 16px rgba(5, 150, 105, 0.2);
+}
+
+/* ===== Results ===== */
+.resultados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.dato {
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.dato p { margin: 0; font-size: 0.9rem; color: var(--verde-oscuro); }
+
+.dato strong {
+  display: block;
+  margin: 6px 0 2px;
+  font-size: 2.2rem;
+  color: var(--esmeralda);
+}
+
+.dato span { font-size: 0.85rem; color: #4b5563; }
+
+/* ===== Footer ===== */
+footer {
+  max-width: 560px;
+  margin: 20px auto 0;
+  text-align: center;
+  color: #4b5563;
+}
+
+/* ===== Certificate (hidden on screen, visible only when printing) ===== */
+.certificado { display: none; }
+
+/* ===== Mobile phones ===== */
+@media (max-width: 480px) {
+  .resultados { grid-template-columns: 1fr; }
+  .tarjeta { padding: 18px; }
+}
+
+/* ===== Print layout: clean ecological certificate ===== */
+@media print {
+  /* Keep background colors and borders when printing */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    background: #ffffff;
+    padding: 0;
+    min-height: 0;
+  }
+
+  /* Hide the app interface: language selector, form, buttons, footer */
+  header, main, footer { display: none !important; }
+
+  .certificado {
+    display: block;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 48px 32px;
+    text-align: center;
+    border: 8px double var(--esmeralda);
+    border-radius: var(--radio);
+    background: var(--fondo);
+  }
+
+  .certificado .hoja { font-size: 3rem; margin: 0; }
+
+  .certificado h1 {
+    font-size: 2.2rem;
+    margin: 8px 0 4px;
+    color: var(--verde-oscuro);
+  }
+
+  .certificado h1::before { content: none; }
+
+  .certificado h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--esmeralda);
+    margin: 0 0 4px;
+  }
+
+  .certificado .colegio {
+    margin: 0 0 32px;
+    color: #4b5563;
+  }
+
+  .certificado .resultados {
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 32px;
+  }
+
+  .certificado .dato { background: var(--blanco); }
+
+  .certificado .fecha {
+    font-weight: 600;
+    color: var(--verde-oscuro);
+    margin: 0 0 8px;
+  }
+
+  .certificado .nota {
+    font-size: 0.85rem;
+    color: #4b5563;
+    margin: 0;
+  }
+}
