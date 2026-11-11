@@ -4,6 +4,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bolívar Eco-Calculator</title>
+
+  <style>
+    /* ===== Color and style variables (Eco Mode) ===== */
+    :root {
+      --verde-oscuro: #064e3b;
+      --esmeralda: #059669;
+      --esmeralda-claro: #10b981;
+      --verde-suave: #d1fae5;
+      --fondo: #ecfdf5;
+      --blanco: #ffffff;
+      --texto: #1f2937;
+      --borde: #a7f3d0;
+      --radio: 16px;
+      --sombra: 0 8px 24px rgba(6, 78, 59, 0.12);
+    }
+
+    /* ===== Base ===== */
+    * { box-sizing: border-box; }
+
+    /* Keeps the hidden attribute working */
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      color: var(--texto);
+      background: linear-gradient(160deg, var(--fondo), var(--verde-suave));
+      min-height: 100vh;
+    }
+
+    /* ===== Header ===== */
+    header {
+      max-width: 560px;
+      margin: 0 auto 24px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      color: var(--verde-oscuro);
+      letter-spacing: -0.5px;
+    }
+
+    h1::before { content: "🌿 "; }
+
+    /* ===== Main container ===== */
+    main {
+      max-width: 560px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    /* ===== Cards ===== */
+    .tarjeta {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 24px;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+      color: var(--esmeralda);
+    }
+
+    /* ===== Form ===== */
+    .campo { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--verde-oscuro);
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--texto);
+      background: var(--fondo);
+      border: 2px solid var(--borde);
+      border-radius: 12px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--esmeralda-claro);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+    }
+
+    /* ===== Button ===== */
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: inherit;
+      color: var(--blanco);
+      background: linear-gradient(135deg, var(--esmeralda), var(--esmeralda-claro));
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(5, 150, 105, 0.45);
+      filter: brightness(1.05);
+    }
+
+    button:active { transform: translateY(0); }
+
+    button:focus-visible {
+      outline: 3px solid var(--verde-oscuro);
+      outline-offset: 3px;
+    }
+
+    /* ===== Results ===== */
+    .resultados {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .dato {
+      background: var(--fondo);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .dato p { margin: 0; font-size: 0.9rem; color: var(--verde-oscuro); }
+
+    .dato strong {
+      display: block;
+      margin: 6px 0 2px;
+      font-size: 2.2rem;
+      color: var(--esmeralda);
+    }
+
+    .dato span { font-size: 0.85rem; color: #4b5563; }
+
+    /* ===== Footer ===== */
+    footer {
+      max-width: 560px;
+      margin: 20px auto 0;
+      text-align: center;
+      color: #4b5563;
+    }
+
+    /* ===== Mobile phones ===== */
+    @media (max-width: 480px) {
+      .resultados { grid-template-columns: 1fr; }
+      .tarjeta { padding: 18px; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -11,10 +178,11 @@
   </header>
 
   <main>
-    <section id="calculadora">
+    <!-- Form card -->
+    <section id="calculadora" class="tarjeta">
       <h2>Calcula tu impacto semanal</h2>
 
-      <p>
+      <div class="campo">
         <label for="transporte">Medio de transporte al colegio:</label>
         <select id="transporte">
           <option value="bus">Bus</option>
@@ -22,14 +190,14 @@
           <option value="carro-compartido">Carro compartido</option>
           <option value="bici-caminando">Bicicleta / Caminando</option>
         </select>
-      </p>
+      </div>
 
-      <p>
+      <div class="campo">
         <label for="papel">Hojas de papel usadas al día:</label>
         <input type="number" id="papel" min="0" step="1" value="0">
-      </p>
+      </div>
 
-      <p>
+      <div class="campo">
         <label for="reciclaje">Nivel de reciclaje:</label>
         <select id="reciclaje">
           <option value="ninguno">Ninguno</option>
@@ -37,15 +205,26 @@
           <option value="medio">Medio</option>
           <option value="alto">Alto</option>
         </select>
-      </p>
+      </div>
 
       <button type="button" id="btn-calcular">Calcular</button>
     </section>
 
-    <section id="resultado" hidden>
+    <!-- Results card -->
+    <section id="resultado" class="tarjeta" hidden>
       <h2>Resultado</h2>
-      <p>CO₂ estimado por semana: <strong id="res-co2">0</strong> kg</p>
-      <p>Eco-Points: <strong id="res-puntos">0</strong></p>
+      <div class="resultados">
+        <div class="dato">
+          <p>CO₂ estimado por semana</p>
+          <strong id="res-co2">0</strong>
+          <span>kg</span>
+        </div>
+        <div class="dato">
+          <p>Eco-Points</p>
+          <strong id="res-puntos">0</strong>
+          <span>puntos</span>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -54,20 +233,20 @@
   </footer>
 
   <script>
-    // Supuestos
+    // Assumptions
     const KM_POR_DIA = 20;
     const DIAS_SEMANA = 5;
-    const CO2_POR_HOJA = 0.005; // kg CO2 por hoja
+    const CO2_POR_HOJA = 0.005; // kg CO2 per sheet
 
-    // Factores de emisión (kg CO2 por km por persona)
+    // Emission factors (kg CO2 per km per person)
     const FACTOR_TRANSPORTE = {
       "bus": 0.089,
       "carro-privado": 0.192,
-      "carro-compartido": 0.064, // ~3 ocupantes
+      "carro-compartido": 0.064, // ~3 occupants
       "bici-caminando": 0
     };
 
-    // Reciclaje: reducción de emisiones del papel y bono de puntos
+    // Recycling: paper emission reduction and points bonus
     const RECICLAJE = {
       "ninguno": { reduccion: 0,   bono: 0 },
       "bajo":    { reduccion: 0.2, bono: 5 },
