@@ -51,6 +51,22 @@
 
     h1::before { content: "🌿 "; }
 
+    /* Language selector (top right of the header) */
+    .selector-idioma {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .selector-idioma select {
+      width: auto;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
     /* ===== Main container ===== */
     main {
       max-width: 560px;
@@ -131,6 +147,20 @@
       outline-offset: 3px;
     }
 
+    /* Secondary (outlined) button used for printing */
+    button.secundario {
+      margin-top: 16px;
+      color: var(--esmeralda);
+      background: var(--blanco);
+      border: 2px solid var(--esmeralda);
+      box-shadow: none;
+    }
+
+    button.secundario:hover {
+      background: var(--fondo);
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.2);
+    }
+
     /* ===== Results ===== */
     .resultados {
       display: grid;
@@ -165,73 +195,183 @@
       color: #4b5563;
     }
 
+    /* ===== Certificate (hidden on screen, visible only when printing) ===== */
+    .certificado { display: none; }
+
     /* ===== Mobile phones ===== */
     @media (max-width: 480px) {
       .resultados { grid-template-columns: 1fr; }
       .tarjeta { padding: 18px; }
     }
+
+    /* ===== Print layout: clean ecological certificate ===== */
+    @media print {
+      /* Keep background colors and borders when printing */
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        background: #ffffff;
+        padding: 0;
+        min-height: 0;
+      }
+
+      /* Hide the app interface: language selector, form, buttons, footer */
+      header, main, footer { display: none !important; }
+
+      .certificado {
+        display: block;
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 48px 32px;
+        text-align: center;
+        border: 8px double var(--esmeralda);
+        border-radius: var(--radio);
+        background: var(--fondo);
+      }
+
+      .certificado .hoja { font-size: 3rem; margin: 0; }
+
+      .certificado h1 {
+        font-size: 2.2rem;
+        margin: 8px 0 4px;
+        color: var(--verde-oscuro);
+      }
+
+      .certificado h1::before { content: none; }
+
+      .certificado h2 {
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: var(--esmeralda);
+        margin: 0 0 4px;
+      }
+
+      .certificado .colegio {
+        margin: 0 0 32px;
+        color: #4b5563;
+      }
+
+      .certificado .resultados {
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 32px;
+      }
+
+      .certificado .dato { background: var(--blanco); }
+
+      .certificado .fecha {
+        font-weight: 600;
+        color: var(--verde-oscuro);
+        margin: 0 0 8px;
+      }
+
+      .certificado .nota {
+        font-size: 0.85rem;
+        color: #4b5563;
+        margin: 0;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
+    <!-- Language selector -->
+    <div class="selector-idioma">
+      <span aria-hidden="true">🌐</span>
+      <select id="idioma" aria-label="Idioma / Language">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
     <h1>Bolívar Eco-Calculator</h1>
   </header>
 
   <main>
     <!-- Form card -->
     <section id="calculadora" class="tarjeta">
-      <h2>Calcula tu impacto semanal</h2>
+      <h2 data-i18n="subtitulo">Calcula tu impacto semanal</h2>
 
       <div class="campo">
-        <label for="transporte">Medio de transporte al colegio:</label>
+        <label for="transporte" data-i18n="lbl_transporte">Medio de transporte al colegio:</label>
         <select id="transporte">
-          <option value="bus">Bus</option>
-          <option value="carro-privado">Carro privado</option>
-          <option value="carro-compartido">Carro compartido</option>
-          <option value="bici-caminando">Bicicleta / Caminando</option>
+          <option value="bus" data-i18n="op_bus">Bus</option>
+          <option value="carro-privado" data-i18n="op_privado">Carro privado</option>
+          <option value="carro-compartido" data-i18n="op_compartido">Carro compartido</option>
+          <option value="bici-caminando" data-i18n="op_bici">Bicicleta / Caminando</option>
         </select>
       </div>
 
       <div class="campo">
-        <label for="papel">Hojas de papel usadas al día:</label>
+        <label for="papel" data-i18n="lbl_papel">Hojas de papel usadas al día:</label>
         <input type="number" id="papel" min="0" step="1" value="0">
       </div>
 
       <div class="campo">
-        <label for="reciclaje">Nivel de reciclaje:</label>
+        <label for="reciclaje" data-i18n="lbl_reciclaje">Nivel de reciclaje:</label>
         <select id="reciclaje">
-          <option value="ninguno">Ninguno</option>
-          <option value="bajo">Bajo</option>
-          <option value="medio">Medio</option>
-          <option value="alto">Alto</option>
+          <option value="ninguno" data-i18n="op_ninguno">Ninguno</option>
+          <option value="bajo" data-i18n="op_bajo">Bajo</option>
+          <option value="medio" data-i18n="op_medio">Medio</option>
+          <option value="alto" data-i18n="op_alto">Alto</option>
         </select>
       </div>
 
-      <button type="button" id="btn-calcular">Calcular</button>
+      <button type="button" id="btn-calcular" data-i18n="btn_calcular">Calcular</button>
     </section>
 
     <!-- Results card -->
     <section id="resultado" class="tarjeta" hidden>
-      <h2>Resultado</h2>
+      <h2 data-i18n="res_titulo">Resultado</h2>
       <div class="resultados">
         <div class="dato">
-          <p>CO₂ estimado por semana</p>
+          <p data-i18n="res_co2">CO₂ estimado por semana</p>
           <strong id="res-co2">0</strong>
           <span>kg</span>
         </div>
         <div class="dato">
           <p>Eco-Points</p>
           <strong id="res-puntos">0</strong>
-          <span>puntos</span>
+          <span data-i18n="res_puntos_unidad">puntos</span>
         </div>
       </div>
+
+      <!-- Print button: stays hidden until the first calculation -->
+      <button type="button" id="btn-imprimir" class="secundario" data-i18n="btn_imprimir" hidden>Imprimir / Guardar Reporte PDF</button>
     </section>
   </main>
 
   <footer>
-    <small>Supuestos: 20 km de viaje al día (ida y vuelta), 5 días a la semana.</small>
+    <small data-i18n="pie">Supuestos: 20 km de viaje al día (ida y vuelta), 5 días a la semana.</small>
   </footer>
 
+  <!-- Ecological certificate (only visible when printing) -->
+  <section id="certificado" class="certificado">
+    <p class="hoja">🌿</p>
+    <h1 data-i18n="cert_titulo">Certificado Ecológico</h1>
+    <h2>Bolívar Eco-Calculator</h2>
+    <p class="colegio" data-i18n="cert_subtitulo">Reporte de impacto ambiental semanal</p>
+
+    <div class="resultados">
+      <div class="dato">
+        <p data-i18n="res_co2">CO₂ estimado por semana</p>
+        <strong id="cert-co2">0</strong>
+        <span>kg</span>
+      </div>
+      <div class="dato">
+        <p>Eco-Points</p>
+        <strong id="cert-puntos">0</strong>
+        <span data-i18n="res_puntos_unidad">puntos</span>
+      </div>
+    </div>
+
+    <p class="fecha"><span data-i18n="cert_fecha">Fecha</span>: <span id="cert-fecha"></span></p>
+    <p class="nota" data-i18n="cert_nota">Valores estimados con base en los supuestos de la calculadora.</p>
+  </section>
+
+  <!-- Original calculation logic (unchanged) -->
   <script>
     // Assumptions
     const KM_POR_DIA = 20;
@@ -271,6 +411,104 @@
     }
 
     document.getElementById("btn-calcular").addEventListener("click", calcular);
+  </script>
+
+  <!-- New features: language switch and printable report -->
+  <script>
+    // Translations for every text marked with data-i18n
+    const TEXTOS = {
+      es: {
+        subtitulo: "Calcula tu impacto semanal",
+        lbl_transporte: "Medio de transporte al colegio:",
+        op_bus: "Bus",
+        op_privado: "Carro privado",
+        op_compartido: "Carro compartido",
+        op_bici: "Bicicleta / Caminando",
+        lbl_papel: "Hojas de papel usadas al día:",
+        lbl_reciclaje: "Nivel de reciclaje:",
+        op_ninguno: "Ninguno",
+        op_bajo: "Bajo",
+        op_medio: "Medio",
+        op_alto: "Alto",
+        btn_calcular: "Calcular",
+        res_titulo: "Resultado",
+        res_co2: "CO₂ estimado por semana",
+        res_puntos_unidad: "puntos",
+        btn_imprimir: "Imprimir / Guardar Reporte PDF",
+        pie: "Supuestos: 20 km de viaje al día (ida y vuelta), 5 días a la semana.",
+        cert_titulo: "Certificado Ecológico",
+        cert_subtitulo: "Reporte de impacto ambiental semanal",
+        cert_fecha: "Fecha",
+        cert_nota: "Valores estimados con base en los supuestos de la calculadora."
+      },
+      en: {
+        subtitulo: "Calculate your weekly impact",
+        lbl_transporte: "Transport to school:",
+        op_bus: "Bus",
+        op_privado: "Private car",
+        op_compartido: "Carpool",
+        op_bici: "Bicycle / Walking",
+        lbl_papel: "Sheets of paper used per day:",
+        lbl_reciclaje: "Recycling level:",
+        op_ninguno: "None",
+        op_bajo: "Low",
+        op_medio: "Medium",
+        op_alto: "High",
+        btn_calcular: "Calculate",
+        res_titulo: "Result",
+        res_co2: "Estimated CO₂ per week",
+        res_puntos_unidad: "points",
+        btn_imprimir: "Print / Save PDF Report",
+        pie: "Assumptions: 20 km of travel per day (round trip), 5 days a week.",
+        cert_titulo: "Eco Certificate",
+        cert_subtitulo: "Weekly environmental impact report",
+        cert_fecha: "Date",
+        cert_nota: "Values estimated based on the calculator's assumptions."
+      }
+    };
+
+    let idiomaActual = "es";
+    let fechaReporte = null; // set when the user calculates
+
+    // Copies the results into the certificate and formats the date
+    function actualizarCertificado() {
+      document.getElementById("cert-co2").textContent = document.getElementById("res-co2").textContent;
+      document.getElementById("cert-puntos").textContent = document.getElementById("res-puntos").textContent;
+
+      if (fechaReporte) {
+        const locale = idiomaActual === "es" ? "es-CO" : "en-US";
+        document.getElementById("cert-fecha").textContent = fechaReporte.toLocaleDateString(locale, {
+          year: "numeric", month: "long", day: "numeric"
+        });
+      }
+    }
+
+    // Applies the chosen language to the whole page instantly
+    function aplicarIdioma(lang) {
+      idiomaActual = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        el.textContent = TEXTOS[lang][el.dataset.i18n];
+      });
+      actualizarCertificado();
+    }
+
+    // Language selector
+    document.getElementById("idioma").addEventListener("change", function (e) {
+      aplicarIdioma(e.target.value);
+    });
+
+    // Runs after calcular() (registered later): shows print button and fills the certificate
+    document.getElementById("btn-calcular").addEventListener("click", function () {
+      fechaReporte = new Date();
+      document.getElementById("btn-imprimir").hidden = false;
+      actualizarCertificado();
+    });
+
+    // Opens the browser print dialog (the user can choose "Save as PDF")
+    document.getElementById("btn-imprimir").addEventListener("click", function () {
+      window.print();
+    });
   </script>
 </body>
 </html>
